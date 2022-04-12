@@ -13,30 +13,6 @@ app.set('view engine', 'hbs');
 app.set('views', __dirname + '/views');
 app.use(express.static(__dirname + '/public'));
 
-app.get('/', (request, response) => {
-  response.render('home');
-});
-
-app.get('/artist-search', (request, response) => {
-    const term = request.query.term;
-    spotifyApi
-  .searchArtists(term)
-  .then(data => {
-    console.log('The received data from the API: ', data.body);
-    const artists = data.body.artists.items;
-    response.render('artist-search-results', {artists}  );
-    
-  })
-  .catch(err => console.log('The error while searching artists occurred: ', err));
-  });
-
-
-  app.get('/albums/:artistID', (request, response) => {
-    const artistID = request.params.artistID;
-    
-  });
-
-
 // setting the spotify-api goes here:
 
 const spotifyApi = new SpotifyWebApi({
@@ -53,6 +29,25 @@ spotifyApi
   );
 
 // Our routes go here:
+
+app.get('/', (request, response) => {
+  response.render('home');
+});
+
+app.get('/artist-search', (request, response) => {
+  const term = request.query.term;
+  spotifyApi
+    .searchArtists(term)
+    .then((data) => {
+      const artists = data.body.artists.items;
+      console.log('the data from API is: ', artists);
+      response.render('artist-search-result', {artists});
+    })
+
+    .catch((err) =>
+      console.log('The error while searching artists occurred: ', err)
+    );
+});
 
 app.listen(3000, () =>
   console.log('My Spotify project running on port 3000 🎧 🥁 🎸 🔊')
