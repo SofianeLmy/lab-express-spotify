@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const express = require('express');
+const res = require('express/lib/response');
 const hbs = require('hbs');
 
 // require spotify-web-api-node package here:
@@ -75,8 +76,10 @@ app.get('/album/:albumId', (request, response) => {
   spotifyApi
   .getAlbumTracks(albumId)
   .then((data) => {
-    console.log(data.body);
+    const tracks = data.body.items;
+    response.render('track', { tracks });
   })
+  
 
   .catch((err) =>
       console.log('The error while searching album occurred: ', err)
