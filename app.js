@@ -49,6 +49,44 @@ app.get('/artist-search', (request, response) => {
     );
 });
 
+
+app.get('/albums/:artistId', (request, response) => {
+  
+  const artistId = request.params.artistId;
+
+  spotifyApi
+  .getArtistAlbums(artistId)
+  .then((data) => {
+    const albums = data.body.items;
+    response.render('albums', {albums});
+  })
+
+  .catch((err) =>
+      console.log('The error while searching album occurred: ', err)
+    );
+  
+});
+
+
+app.get('/album/:albumId', (request, response) => {
+  
+  const albumId = request.params.albumId;
+
+  spotifyApi
+  .getAlbumTracks(albumId)
+  .then((data) => {
+    console.log(data.body);
+  })
+
+  .catch((err) =>
+      console.log('The error while searching album occurred: ', err)
+    );
+  
+});
+
+
+spotifyApi.getAlbumTracks
+
 app.listen(3000, () =>
   console.log('My Spotify project running on port 3000 🎧 🥁 🎸 🔊')
 );
